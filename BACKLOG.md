@@ -4,7 +4,7 @@ Ranked priorities for World Cup 2026 Predictions. Re-rank as the situation chang
 
 ## Active
 
-- **Cloudflare Web Analytics snippet** — waiting on the user to enable Web Analytics in Cloudflare dashboard and paste the `<script>` tag. Once provided, drop into `index.html` `<head>` and the integration is done.
+(In flight. Empty most of the time.)
 
 ## Ranked next
 
@@ -46,7 +46,7 @@ Pick one based on what the data says, not guesses.
 
 ## Done (rolling)
 
-- 2026-06: Analytics — Microsoft Clarity (session recordings, heatmaps) + Firebase Analytics with seven custom events covering registration, drafting, saving, navigation, and the odds-anchoring evaluation
+- 2026-06: Analytics — Microsoft Clarity (session recordings, heatmaps) + Cloudflare Web Analytics (traffic, geo, device) + Firebase Analytics with seven custom events covering registration, drafting, saving, navigation, and the odds-anchoring evaluation
 - 2026-06: Live odds (1X2 implied probabilities, ESPN / DraftKings, favourite tinted teal)
 - 2026-06: Card v2 (team colour stripes, bigger flags, VS pill, filled-input glow, Submitted/Unsaved status copy, AA contrast fix)
 - 2026-06: Surface layering fix (cards properly raised from page bg)

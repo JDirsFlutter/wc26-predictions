@@ -22,7 +22,7 @@ How user behaviour is measured on wc26-predictions. Three tools layered, each an
 
 **What it answers**: "Who's coming to the site?" Page views, sessions, country, device, top referrers.
 
-**Where it lives**: To be added. Cloudflare dashboard → wc26-predictions Workers project → enable Web Analytics → paste the auto-generated `<script>` snippet into `index.html` `<head>`.
+**Where it lives**: `index.html` `<head>`. Beacon token `51a4ff02e8be421d9146fa51b2c9b051`.
 
 **Dashboard**: Cloudflare dashboard → Analytics & Logs → Web Analytics → wc26-predictions.
 

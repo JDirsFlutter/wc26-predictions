@@ -338,7 +338,7 @@
   .match-head .kickoff.final { color: var(--font-interactive-primary-default); font-weight: var(--fw-bold); text-transform: uppercase; letter-spacing: 1px; }
 
   .match-body { padding: var(--space-lg) var(--space-md) var(--space-sm); }
-  .match-versus { display: grid; grid-template-columns: 1fr auto 1fr; gap: var(--space-sm); align-items: center; margin-bottom: var(--space-md); }
+  .match-versus { display: grid; grid-template-columns: 1fr auto 1fr; gap: var(--space-sm); align-items: center; margin-bottom: var(--space-xs); }
   .team { display: flex; flex-direction: column; align-items: center; gap: var(--space-xs); min-width: 0; }
   .team .flag { font-size: 56px; line-height: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35)); }
   .team-name {
@@ -409,7 +409,12 @@
     white-space: nowrap;
   }
 
-  .score-area { display: flex; justify-content: center; align-items: center; gap: var(--space-sm); margin: 0 0 var(--space-md); }
+  .score-area {
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    align-items: center; justify-items: center;
+    gap: var(--space-sm);
+    margin: 0 0 var(--space-md);
+  }
   .score-input {
     width: 64px; height: 56px; padding: 0;
     font-family: var(--font-heading); font-weight: var(--fw-bold);
@@ -498,7 +503,8 @@
   /* ===== Round chip selector (system chip) ===== */
   .round-bar {
     display: flex; gap: var(--space-xs);
-    overflow-x: auto; padding-bottom: var(--space-sm); margin-bottom: var(--space-lg);
+    overflow-x: auto; padding-bottom: var(--space-sm);
+    margin: var(--space-md) 0 var(--space-lg);
     scroll-snap-type: x mandatory; scrollbar-width: none;
   }
   .round-bar::-webkit-scrollbar { display: none; }
@@ -1573,7 +1579,7 @@
     ]);
     const versus = el("div", { class: "match-versus" }, [
       homeTeam,
-      el("span", { class: "vs" }, ["vs"]),
+      el("span", { class: "vs", "aria-hidden": "true" }, ["vs"]),
       awayTeam,
     ]);
 
@@ -1591,6 +1597,7 @@
         value: pred && pred.homeScore !== undefined ? String(pred.homeScore) : "",
         disabled: locked,
         "data-side": "home", "data-match": match.id, placeholder: "-",
+        "aria-label": match.homeTeam + " score",
         oninput: onInput,
       });
       const awayIn = el("input", {
@@ -1598,10 +1605,11 @@
         value: pred && pred.awayScore !== undefined ? String(pred.awayScore) : "",
         disabled: locked,
         "data-side": "away", "data-match": match.id, placeholder: "-",
+        "aria-label": match.awayTeam + " score",
         oninput: onInput,
       });
       scoreBlock = el("div", { class: "score-area" }, [
-        homeIn, el("span", { class: "score-divider" }, [":"]), awayIn,
+        homeIn, el("span", { class: "score-divider", "aria-hidden": "true" }, [":"]), awayIn,
       ]);
     }
 
@@ -1649,9 +1657,10 @@
       footChildren.push(el("span", { class: "locked-text" }, ["Enter both scores to save"]));
     } else if (savedPred) {
       footChildren.push(el("span", { class: "locked-text" }, ["Saved. Edit anytime before kickoff."]));
-    } else {
-      footChildren.push(el("span", { class: "locked-text" }, ["Tap the boxes to predict"]));
     }
+    // Empty footer: when there's no pick yet and the match is scheduled, the
+    // card naturally ends after the venue line. No need for a "tap the boxes"
+    // hint — the score inputs are visually obvious tap targets.
 
     const foot = footChildren.length ? el("div", { class: "match-foot" }, footChildren) : null;
 
@@ -1765,10 +1774,8 @@
       STATE.selectedRound = defaultRoundId(rounds);
     }
 
-    root.appendChild(el("p", { class: "view-meta" }, [
-      "Pick a round. Each match locks at kickoff. Future rounds open " + WC_ROUND_OPEN_DAYS + " days before their first match.",
-    ]));
-
+    // No view-meta line here; the chip bar is self-explanatory and the rules
+    // page covers the open-window detail.
     const bar = el("div", { class: "round-bar" });
     rounds.forEach((r) => {
       const cls = "round-chip" + (r.id === STATE.selectedRound ? " active" : "") + (r.locked ? " locked" : "");
@@ -2044,7 +2051,7 @@
         href: "#",
         onclick: (e) => { e.preventDefault(); showOnboarding(); },
       }, ["Add yourself"]);
-      root.prepend(el("div", { class: "banner info" }, [a, " to the game. No password, no email. Your browser remembers you."]));
+      root.prepend(el("div", { class: "banner info" }, [a, " to start predicting."]));
     }
   }
 

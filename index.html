@@ -869,6 +869,40 @@
 
   const FB_CONFIGURED = WC_FIREBASE && WC_FIREBASE.apiKey && WC_FIREBASE.apiKey !== "PASTE_API_KEY";
 
+  /* ---- Analytics helpers --------------------------------------- */
+  // Per-session set of match IDs the user has touched, so we only fire
+  // pick_drafted once per match per session.
+  const SESSION_DRAFTED = new Set();
+  // Set of match IDs the user has saved a pick for at least once in this
+  // session, used to distinguish first-save events from update-save events.
+  const SESSION_SAVED = new Set();
+
+  function logE(name, params) {
+    try {
+      if (FB && FB.Analytics && FB.logEventFn) {
+        FB.logEventFn(FB.Analytics, name, params || {});
+      }
+    } catch (err) {
+      console.warn("Analytics event failed:", name, err);
+    }
+  }
+
+  function matchFavouriteSide(match) {
+    if (!match || match.oddsHomeML == null || match.oddsAwayML == null) return null;
+    const h = impliedProb(match.oddsHomeML);
+    const d = impliedProb(match.oddsDrawML) || 0;
+    const a = impliedProb(match.oddsAwayML);
+    if (h == null || a == null) return null;
+    if (h >= d && h >= a) return "home";
+    if (a >= d && a >= h) return "away";
+    return "draw";
+  }
+  function pickResultSide(p) {
+    if (p.homeScore > p.awayScore) return "home";
+    if (p.homeScore < p.awayScore) return "away";
+    return "draw";
+  }
+
   async function initFirebase() {
     if (!FB_CONFIGURED) {
       STATE.fbMode = "local";
@@ -884,7 +918,21 @@
       const Auth = auth.getAuth(App);
       const Db = fs.getFirestore(App);
 
-      FB = { app, auth, fs, App, Auth, Db, subs: [] };
+      FB = { app, auth, fs, App, Auth, Db, subs: [], Analytics: null, logEventFn: null };
+
+      // Firebase Analytics. Best-effort: if the browser blocks tracking,
+      // measurementId is missing, or Analytics isn't enabled in the Firebase
+      // console, this fails silently and the rest of the app still works.
+      try {
+        if (WC_FIREBASE.measurementId) {
+          const analyticsMod = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-analytics.js");
+          FB.Analytics = analyticsMod.getAnalytics(App);
+          FB.logEventFn = analyticsMod.logEvent;
+        }
+      } catch (err) {
+        console.warn("Analytics init skipped:", err && err.message);
+      }
+
       STATE.fbMode = "firebase";
 
       // Anonymous auth: each browser gets a stable UID without any user action.
@@ -993,6 +1041,7 @@
       localStorage.setItem("wc26_my_name", name);
       STATE.predictions[name] = JSON.parse(localStorage.getItem("wc26_local_preds") || "{}");
       STATE.participants = [{ name, uid: "local", joinedAt: new Date().toISOString() }];
+      logE("claim_name_completed", { mode: "local" });
       hideModal("onboarding-modal");
       render();
       if (STATE.flushAfterSignIn) {
@@ -1030,6 +1079,7 @@
     }
     STATE.me = name;
     localStorage.setItem("wc26_my_name", name);
+    logE("claim_name_completed", { mode: "firebase" });
     hideModal("onboarding-modal");
     render();
     if (STATE.flushAfterSignIn) {
@@ -1352,6 +1402,10 @@
         : {};
     }
     STATE.pendingPicks[matchId][side === "home" ? "homeScore" : "awayScore"] = valid;
+    if (!SESSION_DRAFTED.has(matchId)) {
+      SESSION_DRAFTED.add(matchId);
+      logE("pick_drafted", { match_id: matchId, stage: match.stage || "" });
+    }
     persistPending();
     renderSaveBar();
   }
@@ -1390,6 +1444,24 @@
         });
         localStorage.setItem("wc26_local_preds", JSON.stringify(STATE.predictions[STATE.me]));
       }
+      // Analytics
+      logE("picks_saved", { count: picks.length, mode: STATE.fbMode });
+      // For each newly-saved match with odds, record whether the user picked
+      // the implied favourite. Powers the anchoring evaluation.
+      picks.forEach(([matchId, p]) => {
+        if (SESSION_SAVED.has(matchId)) return;
+        SESSION_SAVED.add(matchId);
+        const match = STATE.fixtures.find((f) => f.id === matchId);
+        const fav = matchFavouriteSide(match);
+        if (fav) {
+          logE("odds_visible_first_pick", {
+            match_id: matchId,
+            stage: match.stage || "",
+            favourite_picked: pickResultSide(p) === fav,
+          });
+        }
+      });
+
       STATE.pendingPicks = {};
       persistPending();
       render();
@@ -1699,7 +1771,7 @@
       const cls = "round-chip" + (r.id === STATE.selectedRound ? " active" : "") + (r.locked ? " locked" : "");
       const chip = el("button", {
         class: cls, disabled: r.locked,
-        onclick: () => { if (!r.locked) { STATE.selectedRound = r.id; render(); } },
+        onclick: () => { if (!r.locked) { STATE.selectedRound = r.id; logE("round_chip_clicked", { round_id: r.id }); render(); } },
       }, [r.short, el("span", { class: "count" }, ["· " + r.matches.length])]);
       bar.appendChild(chip);
     });
@@ -1929,6 +2001,7 @@
       return;
     }
     STATE.isAdmin = true;
+    logE("admin_opened", {});
     showModal("admin-modal");
     renderAdminMatches();
   }
@@ -1937,6 +2010,7 @@
   function setView(v) {
     STATE.view = v;
     location.hash = "";
+    logE("tab_viewed", { view_id: v });
     render();
   }
 

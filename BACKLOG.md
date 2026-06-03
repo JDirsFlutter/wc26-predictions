@@ -4,62 +4,14 @@ Ranked priorities for World Cup 2026 Predictions. Re-rank as the situation chang
 
 ## Active
 
-(In flight. Empty most of the time.)
+- **Cloudflare Web Analytics snippet** — waiting on the user to enable Web Analytics in Cloudflare dashboard and paste the `<script>` tag. Once provided, drop into `index.html` `<head>` and the integration is done.
 
 ## Ranked next
 
-1. **Analytics setup** — Clarity, Cloudflare Web Analytics, Firebase Analytics with custom events. Detailed brief below.
-2. **Weekly insights digest** — Scheduled task that pulls the previous week's analytics, summarises into `INSIGHTS/YYYY-MM-DD.md`. Requires analytics in place first.
-3. **Today tab pre-tournament copy** — Before June 11 the Today tab is empty. Replace with a countdown + featured upcoming fixtures.
-4. **Slack post on full-time** — Incoming webhook into the colleague Slack: "Mexico 2 - 1 South Africa. James got it exactly. +3 pts." Triggered when admin or auto-sync marks a match final.
-5. **Knockout team auto-population** — When the group stage finishes, populate R32 fixtures from group standings automatically rather than waiting on admin.
-
-## Task brief: Analytics setup
-
-**Goal**: Baseline traffic, behavioural insight, and a conversion funnel. Zero UI change. No PII.
-
-**Touch only**:
-- `index.html` — three small initialisation blocks
-- New file `ANALYTICS.md` — what's tracked and why
-
-**Don't touch**:
-- Anything visual
-- Firestore data shape
-- `data.js` other than docstring updates
-
-**Three integrations, in order**:
-
-### 1. Cloudflare Web Analytics
-Zero code. User toggles it on in the Cloudflare dashboard for the `wc26-predictions` Workers project, pastes the auto-generated `<script>` snippet into `index.html` just before `</head>`. Free, no cookies. Captures page views, country, device, top URLs.
-
-### 2. Microsoft Clarity
-Sign up at clarity.microsoft.com (the project author already uses Clarity on other prototypes, ask for the existing tenant). Create project for `wc26-predictions.jamesdirs90.workers.dev`. Drop the project's `<script>` tag in `<head>`. Free, gives session recordings, heatmaps, scroll depth, rage clicks, dead clicks.
-
-### 3. Firebase Analytics with custom events
-- Add `firebase-analytics` to the existing modular SDK imports (alongside `firebase-app`, `firebase-auth`, `firebase-firestore`)
-- Call `getAnalytics(App)` once after `initializeApp`
-- Log events at these flow points (use `logEvent(analytics, name, params)`):
-
-| Event | Fires when | Params |
-|---|---|---|
-| `claim_name_completed` | `claimName` writes the participant doc successfully | `{ mode: "firebase" \| "local" }` |
-| `pick_drafted` | First time a score input is touched for a match in a session | `{ match_id, round_id }` |
-| `picks_saved` | Batch commit in `saveAllPending` succeeds | `{ count }` |
-| `round_chip_clicked` | Round chip onclick (unlocked path only) | `{ round_id }` |
-| `tab_viewed` | `setView` is called | `{ view_id }` |
-| `admin_opened` | Passcode accepted | `{}` |
-| `odds_visible_first_pick` | First saved pick after the user has seen the odds row | `{ match_id, favourite_picked: bool }` |
-
-The `odds_visible_first_pick` event answers the anchoring question (see below).
-
-**Acceptance**:
-- App behaves exactly as before. No UI / copy / layout change anywhere.
-- Cloudflare Analytics dashboard shows traffic within an hour
-- Clarity shows recordings within an hour
-- GA4 real-time view shows custom events as you click around
-- `ANALYTICS.md` lists every event + the question it answers
-
-**Rough size**: 30 to 45 minutes. One commit per integration is fine.
+1. **Weekly insights digest** — Scheduled task that pulls the previous week's analytics, summarises into `INSIGHTS/YYYY-MM-DD.md`. Requires analytics fully in place first.
+2. **Today tab pre-tournament copy** — Before June 11 the Today tab is empty. Replace with a countdown + featured upcoming fixtures.
+3. **Slack post on full-time** — Incoming webhook into the colleague Slack: "Mexico 2 - 1 South Africa. James got it exactly. +3 pts." Triggered when admin or auto-sync marks a match final.
+4. **Knockout team auto-population** — When the group stage finishes, populate R32 fixtures from group standings automatically rather than waiting on admin.
 
 ## Anchoring trade-off on odds
 
@@ -94,6 +46,7 @@ Pick one based on what the data says, not guesses.
 
 ## Done (rolling)
 
+- 2026-06: Analytics — Microsoft Clarity (session recordings, heatmaps) + Firebase Analytics with seven custom events covering registration, drafting, saving, navigation, and the odds-anchoring evaluation
 - 2026-06: Live odds (1X2 implied probabilities, ESPN / DraftKings, favourite tinted teal)
 - 2026-06: Card v2 (team colour stripes, bigger flags, VS pill, filled-input glow, Submitted/Unsaved status copy, AA contrast fix)
 - 2026-06: Surface layering fix (cards properly raised from page bg)

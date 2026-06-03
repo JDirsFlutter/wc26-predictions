@@ -347,6 +347,55 @@
     border: var(--border-sm) solid var(--border-interactive-weak);
   }
 
+  /* Odds row (3-pill 1X2 implied probability) */
+  .odds-row {
+    display: flex; gap: 6px; align-items: stretch;
+    padding: 0 var(--space-md);
+    margin: 0 0 var(--space-md);
+  }
+  .odds-pill {
+    flex: 1;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 6px 4px;
+    background: var(--c-neutral-700);
+    border: var(--border-sm) solid var(--border-interactive-weak);
+    border-radius: var(--radius-sm);
+    min-width: 0;
+  }
+  .odds-pill.odds-fav {
+    background: var(--c-teal-950);
+    border-color: var(--c-teal-700);
+  }
+  .odds-label {
+    font-family: var(--font-body);
+    font-size: var(--fs-10); line-height: var(--lh-16);
+    font-weight: var(--fw-bold);
+    color: var(--font-interactive-medium);
+    letter-spacing: 1px; text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .odds-pill.odds-fav .odds-label { color: var(--font-interactive-primary-default); }
+  .odds-prob {
+    font-family: var(--font-heading);
+    font-size: var(--fs-16); line-height: var(--lh-20);
+    font-weight: var(--fw-bold);
+    color: var(--font-interactive-strongest);
+    letter-spacing: 0.5px;
+  }
+  .odds-total {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 0 var(--space-xs);
+    background: var(--c-neutral-700);
+    border: var(--border-sm) solid var(--border-interactive-weak);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: var(--fs-10); line-height: var(--lh-16);
+    font-weight: var(--fw-bold);
+    color: var(--font-interactive-medium);
+    text-transform: uppercase; letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
   .score-area { display: flex; justify-content: center; align-items: center; gap: var(--space-sm); margin: 0 0 var(--space-md); }
   .score-input {
     width: 64px; height: 56px; padding: 0;
@@ -1026,6 +1075,31 @@
       const venue = comp.venue || {};
       const venueAddr = venue.address || {};
       const normColor = (c) => (c && /^[0-9a-fA-F]{6}$/.test(c)) ? ("#" + c.toLowerCase()) : null;
+
+      // Odds (DraftKings via ESPN). Some matches don't have odds yet (bracket
+      // placeholders, very distant fixtures). All values null in that case.
+      let oddsHomeML = null, oddsDrawML = null, oddsAwayML = null, oddsTotal = null, oddsProvider = null;
+      const parseML = (s) => {
+        if (s == null) return null;
+        if (typeof s === "number") return s;
+        const n = parseInt(String(s).replace(/^\+/, ""), 10);
+        return Number.isFinite(n) ? n : null;
+      };
+      if (comp.odds && comp.odds[0]) {
+        const o = comp.odds[0];
+        if (o.moneyline) {
+          oddsHomeML = parseML((o.moneyline.home && (o.moneyline.home.close || o.moneyline.home.open) || {}).odds);
+          oddsAwayML = parseML((o.moneyline.away && (o.moneyline.away.close || o.moneyline.away.open) || {}).odds);
+          oddsDrawML = parseML((o.moneyline.draw && (o.moneyline.draw.close || o.moneyline.draw.open) || {}).odds);
+        }
+        if (oddsDrawML == null && o.drawOdds) {
+          oddsDrawML = parseML(o.drawOdds.moneyLine || o.drawOdds.moneyline);
+        }
+        if (typeof o.overUnder === "number") oddsTotal = o.overUnder;
+        else if (typeof o.overUnder === "string") oddsTotal = parseFloat(o.overUnder);
+        oddsProvider = (o.provider && o.provider.displayName) || null;
+      }
+
       return {
         id: String(e.id),
         homeTeam: teamLabel(home.team.displayName || home.team.name || "Home"),
@@ -1042,6 +1116,7 @@
         status,
         finalHome: (home.score !== undefined && home.score !== null && home.score !== "") ? Number(home.score) : null,
         finalAway: (away.score !== undefined && away.score !== null && away.score !== "") ? Number(away.score) : null,
+        oddsHomeML, oddsDrawML, oddsAwayML, oddsTotal, oddsProvider,
         lastSyncedAt: new Date().toISOString(),
       };
     } catch (err) {
@@ -1342,6 +1417,44 @@
                                : "Add yourself & save";
   }
 
+  /* ---- Odds helpers -------------------------------------------- */
+  function impliedProb(americanOdds) {
+    if (americanOdds == null || !Number.isFinite(americanOdds)) return null;
+    if (americanOdds < 0) return Math.abs(americanOdds) / (Math.abs(americanOdds) + 100);
+    return 100 / (americanOdds + 100);
+  }
+
+  function buildOddsRow(match) {
+    if (match.status !== "scheduled") return null;
+    if (match.oddsHomeML == null || match.oddsAwayML == null) return null;
+    const h = impliedProb(match.oddsHomeML);
+    const d = impliedProb(match.oddsDrawML) || 0;
+    const a = impliedProb(match.oddsAwayML);
+    if (h == null || a == null) return null;
+    const sum = h + d + a;
+    if (sum === 0) return null;
+    const hp = h / sum, dp = d / sum, ap = a / sum;
+    const max = Math.max(hp, dp, ap);
+    const pct = (p) => Math.round(p * 100) + "%";
+    const labelHome = match.homeAbbr || match.homeTeam.slice(0, 3).toUpperCase();
+    const labelAway = match.awayAbbr || match.awayTeam.slice(0, 3).toUpperCase();
+
+    const pill = (cls, lbl, prob) => el("div", { class: "odds-pill" + (prob === max ? " odds-fav" : "") }, [
+      el("span", { class: "odds-label" }, [lbl]),
+      el("span", { class: "odds-prob" }, [pct(prob)]),
+    ]);
+
+    const row = [
+      pill("home", labelHome, hp),
+      pill("draw", "Draw", dp),
+      pill("away", labelAway, ap),
+    ];
+    if (match.oddsTotal) {
+      row.push(el("div", { class: "odds-total" }, ["O/U " + match.oddsTotal]));
+    }
+    return el("div", { class: "odds-row", title: "DraftKings (via ESPN)" }, row);
+  }
+
   /* ---- Match card ---------------------------------------------- */
   function matchCard(match) {
     const ko = new Date(match.kickoffISO).getTime();
@@ -1410,7 +1523,11 @@
       ]);
     }
 
-    const body = el("div", { class: "match-body" }, [versus, scoreBlock]);
+    const oddsRow = buildOddsRow(match);
+    const bodyChildren = [versus];
+    if (oddsRow) bodyChildren.push(oddsRow);
+    bodyChildren.push(scoreBlock);
+    const body = el("div", { class: "match-body" }, bodyChildren);
 
     const metaChildren = [];
     const venueText = match.venueName
@@ -1737,6 +1854,12 @@
     root.appendChild(el("div", { class: "rules-card" }, [
       el("h3", null, ["Playing from multiple devices"]),
       el("p", null, ["Your picks are tied to this browser. If you want to play from another device, ask the admin to transfer your name (a 30 second job)."]),
+    ]));
+
+    root.appendChild(el("div", { class: "rules-card" }, [
+      el("h3", null, ["Live odds"]),
+      el("p", null, ["The percentages on each card are de-vigged implied probabilities from market odds (1X2 moneyline). Use them as a steer, not gospel. The favourite is highlighted in teal."]),
+      el("p", null, ["Data via ESPN / DraftKings. Refreshed when fixtures are synced."]),
     ]));
   }
 

@@ -294,21 +294,21 @@
   /* ===== Match card ===== */
   .match-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: var(--space-md); }
   .match {
-    background: var(--c-neutral-700);
+    background: var(--c-neutral-500);
     border: var(--border-sm) solid var(--border-interactive-weak);
     border-radius: var(--radius-lg);
     overflow: hidden;
     transition: border-color var(--dur-fast) var(--ease-standard);
   }
   .match:hover { border-color: var(--border-interactive-strong); }
-  .match.is-final { background: var(--c-neutral-750); }
+  .match.is-final { background: var(--c-neutral-600); }
   .match.is-live { border-color: var(--c-brand-red-500); box-shadow: 0 0 0 1px var(--c-brand-red-500); }
   .match.is-pending { border-color: var(--border-interactive-primary-active); box-shadow: 0 0 0 1px var(--border-interactive-primary-active); }
 
   .match-head {
     display: flex; justify-content: space-between; align-items: center; gap: var(--space-sm);
     padding: var(--space-sm) var(--space-md);
-    background: var(--c-neutral-750);
+    background: var(--c-neutral-600);
     border-bottom: var(--border-sm) solid var(--border-interactive-weak);
     font-family: var(--font-body); font-weight: var(--fw-bold);
     font-size: var(--fs-10); line-height: var(--lh-16);
@@ -343,8 +343,8 @@
     font-family: var(--font-heading); font-weight: var(--fw-bold);
     font-size: var(--fs-32); line-height: var(--lh-40);
     text-align: center;
-    background: var(--c-neutral-800);
-    border: var(--border-sm) solid var(--border-interactive-weak);
+    background: var(--fill-container-weaker);
+    border: var(--border-sm) solid var(--border-interactive-strong);
     border-radius: var(--radius-md);
     color: var(--font-interactive-strongest);
     transition: border-color var(--dur-fast) var(--ease-standard);
@@ -374,7 +374,7 @@
     display: flex; justify-content: space-between; align-items: center; gap: var(--space-sm);
     padding: var(--space-sm) var(--space-md);
     border-top: var(--border-sm) solid var(--border-interactive-weak);
-    background: var(--c-neutral-750);
+    background: var(--c-neutral-600);
   }
 
   /* Generic "ps-btn" pill button (used as .save-btn, .save-bar-btn, modal primaries) */
@@ -495,7 +495,7 @@
   /* ===== Leaderboard table ===== */
   .lb {
     width: 100%; border-collapse: collapse;
-    background: var(--c-neutral-700);
+    background: var(--c-neutral-500);
     border: var(--border-sm) solid var(--border-interactive-weak);
     border-radius: var(--radius-lg);
     overflow: hidden;
@@ -508,7 +508,7 @@
   }
   .lb tbody tr:last-child td { border-bottom: 0; }
   .lb th {
-    background: var(--c-neutral-750);
+    background: var(--c-neutral-600);
     font-family: var(--font-body); font-weight: var(--fw-bold);
     font-size: var(--fs-10); line-height: var(--lh-16);
     text-transform: uppercase; letter-spacing: 1.2px;
@@ -534,8 +534,8 @@
   }
   .modal.hidden { display: none; }
   .modal-card {
-    background: var(--c-neutral-700);
-    border: var(--border-sm) solid var(--border-interactive-weak);
+    background: var(--c-neutral-500);
+    border: var(--border-sm) solid var(--border-interactive-strong);
     border-radius: var(--radius-lg);
     padding: var(--space-lg);
     max-width: 480px; width: 100%;
@@ -565,8 +565,8 @@
   .form-input {
     width: 100%; height: var(--size-12);
     padding: 0 var(--space-md);
-    background: var(--c-neutral-800);
-    border: var(--border-sm) solid var(--border-interactive-weak);
+    background: var(--fill-container-weaker);
+    border: var(--border-sm) solid var(--border-interactive-strong);
     border-radius: var(--radius-md);
     color: var(--font-interactive-strongest);
     font-family: var(--font-body);
@@ -622,8 +622,8 @@
   }
   .admin-row input {
     padding: 6px var(--space-xs);
-    background: var(--c-neutral-800);
-    border: var(--border-sm) solid var(--border-interactive-weak);
+    background: var(--fill-container-weaker);
+    border: var(--border-sm) solid var(--border-interactive-strong);
     color: var(--font-interactive-strongest);
     border-radius: var(--radius-sm);
     font-size: var(--fs-14);
@@ -637,7 +637,7 @@
 
   /* ===== Rules cards ===== */
   .rules-card {
-    background: var(--c-neutral-700);
+    background: var(--c-neutral-500);
     border: var(--border-sm) solid var(--border-interactive-weak);
     border-radius: var(--radius-lg);
     padding: var(--space-md) var(--space-lg);

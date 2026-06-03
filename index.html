@@ -1449,9 +1449,6 @@
       pill("draw", "Draw", dp),
       pill("away", labelAway, ap),
     ];
-    if (match.oddsTotal) {
-      row.push(el("div", { class: "odds-total" }, ["O/U " + match.oddsTotal]));
-    }
     return el("div", { class: "odds-row", title: "DraftKings (via ESPN)" }, row);
   }
 

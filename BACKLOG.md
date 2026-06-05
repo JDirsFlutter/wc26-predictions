@@ -46,6 +46,7 @@ Pick one based on what the data says, not guesses.
 
 ## Done (rolling)
 
+- 2026-06: Fusion tokens via Figma MCP. Rewrote the `:root` block in `index.html` with canonical Fusion names mirroring the Foundations Library path structure pulled live from Figma (`--surface-fill-interactive-primary-active`, `--font-color-interactive-medium`, `--icon-fill-feedback-error` etc.). Backfilled missing tokens (fs-88, full 6-step neutral font + icon ramps, primary pressed font and icon, feedback icons, disabled tokens, full brand palettes, gold/silver/bronze 700s, extended spacing 450 to 1500, shadow-glow-teal, opacity-disabled). Added Fusion component tokens for primary button. Legacy aliases preserve every existing class. Follow-up: migrate CSS rules from aliases to canonical names, drop aliases.
 - 2026-06: Analytics — Microsoft Clarity (session recordings, heatmaps) + Cloudflare Web Analytics (traffic, geo, device) + Firebase Analytics with seven custom events covering registration, drafting, saving, navigation, and the odds-anchoring evaluation
 - 2026-06: Live odds (1X2 implied probabilities, ESPN / DraftKings, favourite tinted teal)
 - 2026-06: Card v2 (team colour stripes, bigger flags, VS pill, filled-input glow, Submitted/Unsaved status copy, AA contrast fix)

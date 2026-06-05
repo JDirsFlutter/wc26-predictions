@@ -30,12 +30,21 @@
   @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap');
 
   :root {
-    /* ---- Primitives ---- */
-    --c-white: #FFFFFF;
-    --c-black: #000000;
-    --c-neutral-20: #F5F5F5;
-    --c-neutral-40: #DEDEDE;
-    --c-neutral-50: #BFBFBF;
+    /* ================================================================
+       FUSION DESIGN TOKENS
+       Canonical names mirror the Figma Foundations Library path
+       structure (surface/fill/interactive/primary/active etc.) and
+       are normalised to US "color" spelling for CSS consistency.
+       Dark theme is baked in. Legacy aliases at the bottom keep all
+       existing CSS classes working unchanged. New code should use
+       the canonical names.
+       ================================================================ */
+
+    /* ---- Primitives: Neutrals ---- */
+    --c-white:       #FFFFFF;
+    --c-neutral-20:  #F5F5F5;
+    --c-neutral-40:  #DEDEDE;
+    --c-neutral-50:  #BFBFBF;
     --c-neutral-100: #757575;
     --c-neutral-300: #575757;
     --c-neutral-500: #3B3B3B;
@@ -43,152 +52,465 @@
     --c-neutral-700: #1C1C1C;
     --c-neutral-750: #141414;
     --c-neutral-800: #0D0D0D;
+    --c-black:       #000000;
 
+    /* ---- Primitives: Teal (primary brand) ---- */
+    --c-teal-50:  #E6F8F5;
     --c-teal-100: #B1EBE0;
+    --c-teal-300: #55D3BD;
     --c-teal-400: #06D6AE;
     --c-teal-500: #02BD9C;
+    --c-teal-550: #02A88B;
     --c-teal-600: #089B80;
     --c-teal-700: #01866F;
     --c-teal-800: #016856;
     --c-teal-900: #014F42;
     --c-teal-950: #002A2A;
 
+    /* ---- Primitives: Red ---- */
+    --c-red-50:  #FBE7E7;
+    --c-red-100: #F3B3B3;
+    --c-red-200: #ED8E8E;
     --c-red-300: #E45B5B;
+    --c-red-400: #DF3B3B;
     --c-red-600: #C40909;
     --c-red-700: #990707;
+    --c-red-900: #5A0404;
+    --c-red-950: #2D0202;
+
+    /* ---- Primitives: Blue ---- */
+    --c-blue-50:  #E7F2FA;
+    --c-blue-200: #8FC1EA;
+    --c-blue-400: #3D93DA;
+    --c-blue-500: #0C78D1;
+    --c-blue-600: #0B6DBE;
+    --c-blue-700: #095594;
+    --c-blue-900: #053258;
+    --c-blue-950: #02192C;
+
+    /* ---- Primitives: Green ---- */
+    --c-green-50:  #E6F3E8;
+    --c-green-100: #B0DAB7;
+    --c-green-200: #8AC994;
+    --c-green-300: #54B063;
+    --c-green-400: #33A145;
     --c-green-500: #008916;
     --c-green-600: #007D14;
-    --c-blue-500: #0C78D1;
+    --c-green-700: #006110;
+    --c-green-900: #003A09;
+    --c-green-950: #001D04;
+
+    /* ---- Primitives: Yellow ---- */
+    --c-yellow-50:  #FFF8E6;
+    --c-yellow-200: #FFDE8A;
+    --c-yellow-300: #FFCF54;
     --c-yellow-500: #FFB800;
     --c-yellow-600: #E8A700;
+    --c-yellow-700: #B58300;
+    --c-yellow-800: #8C6500;
+    --c-yellow-900: #6B4D00;
+    --c-yellow-950: #352600;
+
+    /* ---- Primitives: Purple (bonus) ---- */
+    --c-purple-50:  #F1E8F7;
+    --c-purple-100: #D2B7E7;
+    --c-purple-200: #BC94DB;
+    --c-purple-300: #9E63CB;
+    --c-purple-400: #8B45C1;
+    --c-purple-500: #6E16B1;
+    --c-purple-600: #6414A1;
+    --c-purple-700: #4E107E;
+    --c-purple-900: #2E094A;
+    --c-purple-950: #170425;
+
+    /* ---- Primitives: Orange ---- */
+    --c-orange-100: #F1C6B0;
+    --c-orange-300: #E28354;
+    --c-orange-400: #DC6B33;
+    --c-orange-500: #D34600;
+    --c-orange-600: #C04000;
+    --c-orange-700: #963200;
+    --c-orange-950: #2C0E00;
+
+    /* ---- Primitives: Magenta ---- */
+    --c-magenta-100: #F7B3D5;
+    --c-magenta-200: #F38FC1;
+    --c-magenta-300: #EE5CA5;
+    --c-magenta-400: #EA3C93;
+    --c-magenta-500: #E50B78;
+    --c-magenta-600: #D00A6D;
+    --c-magenta-700: #A30855;
+    --c-magenta-800: #7E0642;
+    --c-magenta-900: #600532;
+    --c-magenta-950: #300219;
+
+    /* ---- Primitives: Brand Red (PokerStars spade) ---- */
     --c-brand-red-500: #D70A0A;
 
-    --c-gold-500: #D4AF37;
+    /* ---- Primitives: Accent metals ---- */
+    --c-gold-500:   #D4AF37;
+    --c-gold-700:   #9C7803;
     --c-silver-500: #BFC5C7;
+    --c-silver-700: #787E80;
     --c-bronze-500: #BB7534;
+    --c-bronze-600: #AA6A2F;
 
-    /* ---- Semantic tokens (dark theme — default) ---- */
-    --fill-background: #1C1C1C;
-    --fill-container-weakest: #000000;
-    --fill-container-weaker: #141414;
-    --fill-container-weak: #3B3B3B;
+    /* ---- Overlay primitive ---- */
+    --c-overlay: rgba(0, 0, 0, 0.75);
 
-    --fill-interactive-neutral-weakest: #000000;
-    --fill-interactive-neutral-weaker: #1C1C1C;
-    --fill-interactive-neutral-weak: #575757;
-    --fill-interactive-neutral-strong: #757575;
-    --fill-interactive-neutral-strongest: #FFFFFF;
-    --fill-interactive-neutral-hover-weak: #575757;
-    --fill-interactive-neutral-pressed-weak: #3B3B3B;
+    /* ================================================================
+       SEMANTIC TOKENS (canonical Fusion, dark theme)
+       Path mirrors Figma. Format: <surface|font|icon>/<group>/<state>.
+       ================================================================ */
 
-    --fill-interactive-primary-default: #01866F;
-    --fill-interactive-primary-hover-strong: #089B80;
-    --fill-interactive-primary-hover-weak: #014F42;
-    --fill-interactive-primary-pressed: #016856;
-    --fill-interactive-primary-active: #002A2A;
+    /* ---- Surface fill: Interactive · Primary (teal) ---- */
+    --surface-fill-interactive-primary-default:      var(--c-teal-700);
+    --surface-fill-interactive-primary-hover-strong: var(--c-teal-400);
+    --surface-fill-interactive-primary-hover-weak:   var(--c-teal-700);
+    --surface-fill-interactive-primary-pressed:      var(--c-teal-600);
+    --surface-fill-interactive-primary-active:       var(--c-teal-950);
 
-    --fill-disabled-default: #1C1C1C;
-    --fill-disabled-strong: #DEDEDE;
+    /* ---- Surface fill: Interactive · Neutral ---- */
+    --surface-fill-interactive-neutral-weakest:        var(--c-black);
+    --surface-fill-interactive-neutral-weaker:         var(--c-neutral-700);
+    --surface-fill-interactive-neutral-weak:           var(--c-neutral-300);
+    --surface-fill-interactive-neutral-strong:         var(--c-neutral-100);
+    --surface-fill-interactive-neutral-strongest:      var(--c-white);
+    --surface-fill-interactive-neutral-hover-weak:     var(--c-neutral-300);
+    --surface-fill-interactive-neutral-hover-strong:   var(--c-neutral-50);
+    --surface-fill-interactive-neutral-pressed-weak:   var(--c-neutral-500);
+    --surface-fill-interactive-neutral-pressed-strong: var(--c-neutral-500);
 
-    --fill-interactive-error-weak: #5A0404;
-    --fill-interactive-info-weak: #053258;
-    --fill-interactive-success-weak: #003A09;
-    --fill-interactive-warning-weak: #6B4D00;
+    /* ---- Surface fill: Interactive · Feedback ---- */
+    --surface-fill-interactive-success-weak:   var(--c-green-900);
+    --surface-fill-interactive-success-strong: var(--c-green-500);
+    --surface-fill-interactive-error-weak:     var(--c-red-900);
+    --surface-fill-interactive-error-strong:   var(--c-red-300);
+    --surface-fill-interactive-warning-weak:   var(--c-yellow-900);
+    --surface-fill-interactive-warning-strong: var(--c-yellow-500);
+    --surface-fill-interactive-info-weak:      var(--c-blue-900);
+    --surface-fill-interactive-info-strong:    var(--c-blue-500);
+    --surface-fill-interactive-bonus-weak:     var(--c-purple-900);
+    --surface-fill-interactive-bonus-strong:   var(--c-purple-500);
 
-    --fill-overlay: rgba(0,0,0,0.75);
+    /* ---- Surface fill: Non-interactive · Background & containers ---- */
+    --surface-fill-nonInteractive-background-default:       var(--c-neutral-700);
+    --surface-fill-nonInteractive-neutral-containerWeakest: var(--c-black);
+    --surface-fill-nonInteractive-neutral-containerWeaker:  var(--c-neutral-750);
+    --surface-fill-nonInteractive-neutral-containerWeak:    var(--c-neutral-500);
 
-    --border-interactive-weak: #3B3B3B;
-    --border-interactive-strong: #757575;
-    --border-interactive-strongest: #FFFFFF;
-    --border-interactive-focused: #0C78D1;
-    --border-interactive-error: #E45B5B;
-    --border-interactive-primary-active: #02BD9C;
+    /* ---- Surface fill: Disabled & overlay ---- */
+    --surface-fill-disabled-default: var(--c-neutral-700);
+    --surface-fill-disabled-strong:  var(--c-neutral-40);
+    --surface-fill-overlay-default:  var(--c-overlay);
 
-    --font-interactive-strongest: #FFFFFF;
-    --font-interactive-stronger: #F5F5F5;
-    --font-interactive-strong: #DEDEDE;
-    --font-interactive-medium: #BFBFBF;
-    --font-interactive-weak: #757575;
-    --font-interactive-onPrimary: #000000;
-    --font-interactive-primary-default: #02BD9C;
-    --font-interactive-primary-hover: #06D6AE;
-    --font-interactive-urgent: #E45B5B;
-    --font-error: #E45B5B;
-    --font-brand: #D70A0A;
+    /* ---- Surface border: Interactive ---- */
+    --surface-border-interactive-weak:           var(--c-neutral-500);
+    --surface-border-interactive-strong:         var(--c-neutral-100);
+    --surface-border-interactive-strongest:      var(--c-white);
+    --surface-border-interactive-focused:        var(--c-blue-500);
+    --surface-border-interactive-error:          var(--c-red-300);
+    --surface-border-interactive-primary-active: var(--c-teal-500);
 
-    --icon-interactive-strongest: #FFFFFF;
-    --icon-interactive-medium: #BFBFBF;
-    --icon-interactive-weak: #757575;
+    /* ---- Surface border: Disabled ---- */
+    --surface-border-disabled-default: var(--c-neutral-500);
+    --surface-border-disabled-strong:  var(--c-neutral-300);
 
-    /* ---- Typography ---- */
-    --font-heading: "Oswald", "Roboto Condensed", "Arial Narrow", "Impact", sans-serif;
-    --font-body: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    --font-mono: "Roboto Mono", "Menlo", "SF Mono", Consolas, monospace;
+    /* ---- Surface border: Non-interactive (metals) ---- */
+    --surface-border-nonInteractive-gold-default:   var(--c-gold-500);
+    --surface-border-nonInteractive-silver-default: var(--c-silver-500);
+    --surface-border-nonInteractive-bronze-default: var(--c-bronze-500);
 
-    --fw-regular: 400;
-    --fw-medium: 500;
-    --fw-bold: 700;
+    /* ---- Font color: Interactive · Neutral ---- */
+    --font-color-interactive-strongest: var(--c-white);
+    --font-color-interactive-stronger:  var(--c-neutral-20);
+    --font-color-interactive-strong:    var(--c-neutral-40);
+    --font-color-interactive-medium:    var(--c-neutral-50);
+    --font-color-interactive-weak:      var(--c-neutral-100);
+    --font-color-interactive-weakest:   var(--c-black);
 
-    --fs-10: 10px;
-    --fs-12: 12px;
-    --fs-14: 14px;
-    --fs-16: 16px;
-    --fs-18: 18px;
-    --fs-20: 20px;
-    --fs-24: 24px;
-    --fs-32: 32px;
-    --fs-40: 40px;
-    --fs-56: 56px;
+    /* ---- Font color: Interactive · Primary (teal) ---- */
+    --font-color-interactive-primary-default: var(--c-teal-500);
+    --font-color-interactive-primary-hover:   var(--c-teal-400);
+    --font-color-interactive-primary-pressed: var(--c-teal-600);
 
-    --lh-16: 16px;
-    --lh-20: 20px;
-    --lh-24: 24px;
-    --lh-28: 28px;
-    --lh-32: 32px;
-    --lh-40: 40px;
-    --lh-48: 48px;
-    --lh-56: 56px;
+    /* ---- Font color: On-fill ---- */
+    --font-color-interactive-on-primary: var(--c-black);
 
-    /* ---- Spacing ---- */
-    --space-2xs: 4px;
-    --space-xs: 8px;
-    --space-sm: 12px;
-    --space-md: 16px;
-    --space-lg: 24px;
-    --space-xl: 32px;
-    --space-500: 40px;
-    --space-600: 48px;
+    /* ---- Font color: Feedback & brand ---- */
+    --font-color-interactive-red-urgent: var(--c-red-300);
+    --font-color-feedback-error:         var(--c-red-300);
+    --font-color-brand:                  var(--c-brand-red-500);
 
-    /* ---- Sizes ---- */
-    --size-4: 16px;
-    --size-6: 24px;
-    --size-8: 32px;
+    /* ---- Font color: Disabled ---- */
+    --font-color-disabled-default: var(--c-neutral-300);
+    --font-color-disabled-strong:  var(--c-neutral-100);
+
+    /* ---- Icon fill: Interactive · Neutral ---- */
+    --icon-fill-interactive-strongest: var(--c-white);
+    --icon-fill-interactive-stronger:  var(--c-neutral-20);
+    --icon-fill-interactive-strong:    var(--c-neutral-40);
+    --icon-fill-interactive-medium:    var(--c-neutral-50);
+    --icon-fill-interactive-weak:      var(--c-neutral-100);
+    --icon-fill-interactive-weakest:   var(--c-black);
+
+    /* ---- Icon fill: Interactive · Primary ---- */
+    --icon-fill-interactive-primary-default: var(--c-teal-500);
+    --icon-fill-interactive-primary-hover:   var(--c-teal-400);
+    --icon-fill-interactive-primary-pressed: var(--c-teal-600);
+
+    /* ---- Icon fill: On-fill ---- */
+    --icon-fill-interactive-on-primary: var(--c-black);
+    --icon-fill-interactive-on-error:   var(--c-white);
+
+    /* ---- Icon fill: Feedback ---- */
+    --icon-fill-feedback-info:    var(--c-blue-50);
+    --icon-fill-feedback-success: var(--c-green-50);
+    --icon-fill-feedback-error:   var(--c-red-50);
+    --icon-fill-feedback-warning: var(--c-yellow-50);
+    --icon-fill-feedback-bonus:   var(--c-purple-50);
+
+    /* ---- Icon fill: Metals ---- */
+    --icon-fill-gold-default:   var(--c-gold-500);
+    --icon-fill-silver-default: var(--c-silver-500);
+    --icon-fill-bronze-default: var(--c-bronze-500);
+
+    /* ---- Icon fill: Disabled ---- */
+    --icon-fill-disabled-weak:   var(--c-neutral-300);
+    --icon-fill-disabled-strong: var(--c-neutral-100);
+
+    /* ================================================================
+       COMPONENT TOKENS
+       Fusion's first-class component-level tokens. Resolved from
+       semantic tokens so theme swaps cascade. Mirror Figma paths
+       under "component/<name>/<part>/<state>".
+       ================================================================ */
+
+    --component-button-radius: 9999px;
+    --component-button-primary-fill-default:        var(--surface-fill-interactive-primary-default);
+    --component-button-primary-fill-hover:          var(--surface-fill-interactive-primary-hover-strong);
+    --component-button-primary-fill-pressed:        var(--surface-fill-interactive-primary-pressed);
+    --component-button-primary-fill-disabled:       var(--surface-fill-disabled-strong);
+    --component-button-primary-font-color-default:  var(--font-color-interactive-on-primary);
+    --component-button-primary-font-color-disabled: var(--font-color-disabled-strong);
+    --component-button-primary-icon-color-default:  var(--icon-fill-interactive-on-primary);
+    --component-button-primary-icon-color-disabled: var(--icon-fill-disabled-strong);
+
+    /* ================================================================
+       TYPOGRAPHY
+       ================================================================ */
+
+    /* Font families. Druk Text is licensed; Oswald + Roboto Condensed
+       carry the condensed-display look in its absence. */
+    --font-family-heading:      "Druk Text", "Oswald", "Roboto Condensed", "Arial Narrow", "Impact", sans-serif;
+    --font-family-heading-wide: "Druk Text Wide", "Druk Text", "Oswald", "Impact", sans-serif;
+    --font-family-heading-mega: "Druk Cond Super", "Druk Cond", "Druk Text", "Oswald", "Impact", sans-serif;
+    --font-family-body:         "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-family-mono:         "Roboto Mono", "Menlo", "SF Mono", Consolas, monospace;
+    --font-family-stars:        "StarsOriginal", var(--font-family-heading);
+
+    /* Font weights */
+    --font-weight-regular: 400;
+    --font-weight-medium:  500;
+    --font-weight-bold:    700;
+
+    /* Font sizes */
+    --font-size-10: 10px;
+    --font-size-12: 12px;
+    --font-size-14: 14px;
+    --font-size-16: 16px;
+    --font-size-18: 18px;
+    --font-size-20: 20px;
+    --font-size-24: 24px;
+    --font-size-32: 32px;
+    --font-size-40: 40px;
+    --font-size-56: 56px;
+    --font-size-88: 88px;
+
+    /* Line heights */
+    --line-height-16: 16px;
+    --line-height-20: 20px;
+    --line-height-24: 24px;
+    --line-height-28: 28px;
+    --line-height-32: 32px;
+    --line-height-40: 40px;
+    --line-height-48: 48px;
+    --line-height-56: 56px;
+    --line-height-88: 88px;
+
+    /* ================================================================
+       SPACING & SIZING
+       ================================================================ */
+
+    /* Spacing scale (8px base). Canonical Fusion token names. */
+    --spacing-none: 0px;
+    --spacing-4xs: 2px;
+    --spacing-2xs: 4px;
+    --spacing-xs:  8px;
+    --spacing-sm:  12px;
+    --spacing-md:  16px;
+    --spacing-lg:  24px;
+    --spacing-xl:  32px;
+
+    /* Spacing (extended) */
+    --spacing-450:  36px;
+    --spacing-500:  40px;
+    --spacing-600:  48px;
+    --spacing-700:  56px;
+    --spacing-800:  64px;
+    --spacing-1000: 80px;
+    --spacing-1500: 120px;
+
+    /* Sizes (icons, avatars, touch targets) */
+    --size-4:  16px;
+    --size-5:  20px;
+    --size-6:  24px;
+    --size-8:  32px;
+    --size-9:  36px;
     --size-10: 40px;
     --size-12: 48px;
+    --size-16: 64px;
 
-    /* ---- Radius ---- */
-    --radius-sm: 4px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
+    /* ================================================================
+       RADIUS, BORDERS, OPACITY
+       ================================================================ */
+
+    --radius-none: 0px;
+    --radius-sm:   4px;
+    --radius-md:   8px;
+    --radius-lg:   12px;
     --radius-full: 9999px;
 
-    /* ---- Border widths ---- */
     --border-sm: 1px;
     --border-md: 2px;
     --border-lg: 4px;
 
-    /* ---- Motion ---- */
-    --ease-standard: cubic-bezier(0.2, 0, 0, 1);
-    --ease-emphasize: cubic-bezier(0.3, 0, 0.1, 1);
-    --dur-fast: 120ms;
-    --dur-base: 200ms;
-    --dur-slow: 320ms;
+    --opacity-disabled: 0.15;
 
-    /* ---- Shadows ---- */
+    /* ================================================================
+       ELEVATION & FOCUS
+       ================================================================ */
+
     --shadow-1: 0 1px 2px -1px rgba(0,0,0,0.10), 0 1px 3px 0 rgba(0,0,0,0.10);
     --shadow-2: 0 2px 4px -2px rgba(0,0,0,0.18), 0 4px 8px 0 rgba(0,0,0,0.22);
     --shadow-3: 0 8px 16px -4px rgba(0,0,0,0.28), 0 16px 32px 0 rgba(0,0,0,0.32);
-    --focus-ring: 0 0 0 2px #0C78D1;
+    --shadow-glow-teal: 0 0 0 4px rgba(2,189,156,0.18);
+    --focus-ring: 0 0 0 2px var(--c-blue-500);
+
+    /* ================================================================
+       MOTION
+       ================================================================ */
+
+    --motion-easing-standard:  cubic-bezier(0.2, 0, 0, 1);
+    --motion-easing-emphasize: cubic-bezier(0.3, 0, 0.1, 1);
+
+    --motion-duration-fast: 120ms;
+    --motion-duration-base: 200ms;
+    --motion-duration-slow: 320ms;
+
+    /* ================================================================
+       LEGACY ALIASES
+       Map v1 names to canonical Fusion tokens so existing CSS rules
+       keep working unchanged. New code should use the canonical names.
+       These aliases will be removed after CSS rule migration completes.
+       ================================================================ */
+
+    /* Fill aliases */
+    --fill-background:                       var(--surface-fill-nonInteractive-background-default);
+    --fill-container-weakest:                var(--surface-fill-nonInteractive-neutral-containerWeakest);
+    --fill-container-weaker:                 var(--surface-fill-nonInteractive-neutral-containerWeaker);
+    --fill-container-weak:                   var(--surface-fill-nonInteractive-neutral-containerWeak);
+    --fill-interactive-neutral-weakest:      var(--surface-fill-interactive-neutral-weakest);
+    --fill-interactive-neutral-weaker:       var(--surface-fill-interactive-neutral-weaker);
+    --fill-interactive-neutral-weak:         var(--surface-fill-interactive-neutral-weak);
+    --fill-interactive-neutral-strong:       var(--surface-fill-interactive-neutral-strong);
+    --fill-interactive-neutral-strongest:    var(--surface-fill-interactive-neutral-strongest);
+    --fill-interactive-neutral-hover-weak:   var(--surface-fill-interactive-neutral-hover-weak);
+    --fill-interactive-neutral-pressed-weak: var(--surface-fill-interactive-neutral-pressed-weak);
+    --fill-interactive-primary-default:      var(--surface-fill-interactive-primary-default);
+    --fill-interactive-primary-hover-strong: var(--surface-fill-interactive-primary-hover-strong);
+    --fill-interactive-primary-hover-weak:   var(--surface-fill-interactive-primary-hover-weak);
+    --fill-interactive-primary-pressed:      var(--surface-fill-interactive-primary-pressed);
+    --fill-interactive-primary-active:       var(--surface-fill-interactive-primary-active);
+    --fill-disabled-default:                 var(--surface-fill-disabled-default);
+    --fill-disabled-strong:                  var(--surface-fill-disabled-strong);
+    --fill-interactive-error-weak:           var(--surface-fill-interactive-error-weak);
+    --fill-interactive-info-weak:            var(--surface-fill-interactive-info-weak);
+    --fill-interactive-success-weak:         var(--surface-fill-interactive-success-weak);
+    --fill-interactive-warning-weak:         var(--surface-fill-interactive-warning-weak);
+    --fill-overlay:                          var(--surface-fill-overlay-default);
+
+    /* Border aliases */
+    --border-interactive-weak:           var(--surface-border-interactive-weak);
+    --border-interactive-strong:         var(--surface-border-interactive-strong);
+    --border-interactive-strongest:      var(--surface-border-interactive-strongest);
+    --border-interactive-focused:        var(--surface-border-interactive-focused);
+    --border-interactive-error:          var(--surface-border-interactive-error);
+    --border-interactive-primary-active: var(--surface-border-interactive-primary-active);
+
+    /* Font aliases */
+    --font-interactive-strongest:       var(--font-color-interactive-strongest);
+    --font-interactive-stronger:        var(--font-color-interactive-stronger);
+    --font-interactive-strong:          var(--font-color-interactive-strong);
+    --font-interactive-medium:          var(--font-color-interactive-medium);
+    --font-interactive-weak:            var(--font-color-interactive-weak);
+    --font-interactive-onPrimary:       var(--font-color-interactive-on-primary);
+    --font-interactive-primary-default: var(--font-color-interactive-primary-default);
+    --font-interactive-primary-hover:   var(--font-color-interactive-primary-hover);
+    --font-interactive-urgent:          var(--font-color-interactive-red-urgent);
+    --font-error:                       var(--font-color-feedback-error);
+    --font-brand:                       var(--font-color-brand);
+
+    /* Icon aliases */
+    --icon-interactive-strongest: var(--icon-fill-interactive-strongest);
+    --icon-interactive-medium:    var(--icon-fill-interactive-medium);
+    --icon-interactive-weak:      var(--icon-fill-interactive-weak);
+
+    /* Typography aliases */
+    --font-heading: var(--font-family-heading);
+    --font-body:    var(--font-family-body);
+    --font-mono:    var(--font-family-mono);
+
+    --fw-regular: var(--font-weight-regular);
+    --fw-medium:  var(--font-weight-medium);
+    --fw-bold:    var(--font-weight-bold);
+
+    --fs-10: var(--font-size-10);
+    --fs-12: var(--font-size-12);
+    --fs-14: var(--font-size-14);
+    --fs-16: var(--font-size-16);
+    --fs-18: var(--font-size-18);
+    --fs-20: var(--font-size-20);
+    --fs-24: var(--font-size-24);
+    --fs-32: var(--font-size-32);
+    --fs-40: var(--font-size-40);
+    --fs-56: var(--font-size-56);
+
+    --lh-16: var(--line-height-16);
+    --lh-20: var(--line-height-20);
+    --lh-24: var(--line-height-24);
+    --lh-28: var(--line-height-28);
+    --lh-32: var(--line-height-32);
+    --lh-40: var(--line-height-40);
+    --lh-48: var(--line-height-48);
+    --lh-56: var(--line-height-56);
+
+    /* Spacing aliases */
+    --space-2xs: var(--spacing-2xs);
+    --space-xs:  var(--spacing-xs);
+    --space-sm:  var(--spacing-sm);
+    --space-md:  var(--spacing-md);
+    --space-lg:  var(--spacing-lg);
+    --space-xl:  var(--spacing-xl);
+    --space-500: var(--spacing-500);
+    --space-600: var(--spacing-600);
+
+    /* Motion aliases */
+    --ease-standard:  var(--motion-easing-standard);
+    --ease-emphasize: var(--motion-easing-emphasize);
+    --dur-fast: var(--motion-duration-fast);
+    --dur-base: var(--motion-duration-base);
+    --dur-slow: var(--motion-duration-slow);
   }
 
   html { color-scheme: dark; }

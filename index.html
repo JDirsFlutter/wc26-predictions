@@ -539,6 +539,12 @@
     border-bottom: var(--border-sm) solid var(--border-interactive-weak);
   }
   .topbar-inner { max-width: 1120px; margin: 0 auto; display: flex; align-items: center; gap: var(--space-md); flex-wrap: wrap; }
+  .topbar-brand {
+    display: inline-flex; align-items: center;
+    color: var(--c-brand-red-500);
+    flex-shrink: 0;
+  }
+  .topbar-logo { height: 32px; width: 32px; display: block; }
   .topbar h1 {
     font-family: var(--font-heading); font-weight: var(--fw-bold);
     font-size: var(--fs-24); line-height: var(--lh-32);
@@ -1080,6 +1086,7 @@
   /* ===== Responsive ===== */
   @media (max-width: 640px) {
     .topbar { padding: var(--space-sm) var(--space-md); }
+    .topbar-logo { height: 24px; width: 24px; }
     .topbar h1 { font-size: var(--fs-20); line-height: var(--lh-24); }
     .topbar-stats { gap: var(--space-xs); width: 100%; margin-left: 0; margin-top: var(--space-xs); }
     main { padding: var(--space-md) var(--space-md) var(--space-600); }
@@ -1096,6 +1103,11 @@
 <body>
   <header class="topbar">
     <div class="topbar-inner">
+      <span class="topbar-brand" role="img" aria-label="PokerStars">
+        <svg class="topbar-logo" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M12 2C7 7 3 10 3 14C3 17 5 18.5 7.5 18.5C9 18.5 10 18 11 17L10 22L14 22L13 17C14 18 15 18.5 16.5 18.5C19 18.5 21 17 21 14C21 10 17 7 12 2Z"/>
+        </svg>
+      </span>
       <div>
         <h1>World Cup 2026 Predictions</h1>
         <p class="sub">Pick scores. Climb the leaderboard.</p>
